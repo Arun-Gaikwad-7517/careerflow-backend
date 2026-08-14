@@ -114,7 +114,7 @@ async function uploadResume(req, res) {
           1,
           req.file.originalname,
           req.file.originalname,
-          req.file.path,
+          req.file.path || null,
           req.file.size,
           req.file.mimetype,
           rawText,

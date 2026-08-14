@@ -1,5 +1,3 @@
-const pdfParseModule = require('pdf-parse');
-
 // Master Skill Keywords for Deterministic Parsing
 const KNOWN_SKILLS = [
   'Node.js', 'Express.js', 'JavaScript', 'TypeScript', 'REST API',
@@ -10,13 +8,14 @@ const KNOWN_SKILLS = [
 
 /**
  * Deterministic PDF text extractor
- * Handles both function export (v1) and object with PDFParse class (v2+)
+ * Lazy-loads pdf-parse inside execution context for serverless compatibility.
  */
 async function extractTextFromBuffer(buffer) {
   if (!buffer || buffer.length === 0) {
     throw new Error('Empty file buffer provided for text extraction');
   }
   try {
+    const pdfParseModule = require('pdf-parse');
     if (typeof pdfParseModule === 'function') {
       const parsedData = await pdfParseModule(buffer);
       return parsedData && parsedData.text ? parsedData.text.trim() : '';
